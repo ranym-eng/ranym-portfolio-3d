@@ -30,14 +30,6 @@ The goal is to showcase not only my projects, but also my ability to build moder
 
 🔗 [View Portfolio](https://ranym-portfolio-3d.vercel.app/)
 
-## Google Analytics
-
-Create a `.env` file from `.env.example` and replace `G-XXXXXXXXXX` with your Google Analytics measurement ID:
-
-```env
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
-
 ## 🔒 Copyright
 
 © 2026 Ranym Mejri. All rights reserved.
