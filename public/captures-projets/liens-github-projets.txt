@@ -1,0 +1,1356 @@
+https://github.com/ranym-eng/test-trace-management-frontend 
+readme 
+# trace-test
+
+Frontend for a **test trace logging and management** web application: authentication, role-based access, and dashboards for traces, statistics, and administration.
+
+**Repository:** [github.com/ranym-eng/test-logging-management-system-FrondEnd](https://github.com/ranym-eng/test-logging-management-system-FrondEnd)
+
+## Diagrams
+
+### Use case diagram
+
+![Use case diagram](./UseCaseDiagram.jpg)
+
+### Global class diagram
+
+![Global class diagram](./dc%20global.jpg)
+
+**Large demo images:** some stock photos under `src/assets/` are listed in `.gitignore` so they stay on your machine after a clone but are **not** stored in Git (keeps `git push` / clones fast). If a screen looks missing images after clone, copy those files from a full template backup or replace paths with your own assets.
+
+## Use cases (summary)
+
+### User (base role)
+
+**Test manager** and **Administrator** inherit these capabilities.
+
+- **Register** — sign up
+- **Authenticate** — sign in
+- **View profile** — account information
+- **Lock the application** — session lock / idle protection
+- **View test traces** — browse test trace data
+- **View statistics** — metrics and summaries
+
+### Test manager
+
+- All **User** capabilities
+- **Manage log files** — log file administration
+
+### Administrator
+
+- All **User** capabilities
+- **Manage serial numbers** — device / serial reference data
+- **Manage operations** — operational configuration or tracking
+- **Receive notifications** — system or business alerts
+- **Manage users** — user lifecycle and permissions
+
+## Tech stack
+
+- [Angular](https://angular.io/) 17
+- [Angular Material](https://material.angular.io/), Bootstrap 5
+- JWT auth (`@auth0/angular-jwt`, `jwt-decode`)
+- Charts, maps, and Firebase-related libraries as listed in `package.json`
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (LTS compatible with Angular 17, e.g. 18.x or 20.x)
+- npm
+
+## Setup
+
+```bash
+git clone https://github.com/ranym-eng/test-logging-management-system-FrondEnd.git
+cd test-logging-management-system-FrondEnd
+npm install
+```
+
+## npm scripts
+
+| Command        | Description                          |
+|----------------|--------------------------------------|
+| `npm start`    | Dev server (`ng serve`)              |
+| `npm run build`| Production build (`ng build`)        |
+| `npm test`     | Unit tests (Karma / Jasmine)         |
+
+Production output is written to `dist/trace-test/`.
+
+## Configuration
+
+- **API / environments:** `src/environments/environment.ts` and `environment.prod.ts`.
+- **Login logo:** place `LOGO_ENTREPRISE.png` under `src/assets/` (referenced from `src/app/login/login.component.html`). Adjust the path if you use another asset name.
+- **Sample email domain (commented example flows):** `@entreprise.com` is used in commented registration/login examples in the source code.
+
+
+
+
+https://github.com/ranym-eng/Gymify-symfony
+
+# Gymify Web
+
+## Système de Gestion de Salle de Sport
+
+Gymify Web est une application web développée dans le cadre des cours de l’École d’Ingénieurs ESPRIT pour l’année universitaire 2024-2025.
+
+L’application permet de gérer plusieurs salles de sport à travers une plateforme centralisée destinée aux administrateurs, responsables de salles, entraîneurs et sportifs. Elle couvre plusieurs modules : gestion des utilisateurs, salles, activités, abonnements, événements, cours, paiements, avis, blogs, produits et réclamations.
+
+---
+
+## Table des matières
+
+* [Aperçu du projet](#aperçu-du-projet)
+* [Fonctionnalités](#fonctionnalités)
+* [Rôles utilisateurs](#rôles-utilisateurs)
+* [Pile technologique](#pile-technologique)
+* [Structure du projet](#structure-du-projet)
+* [Prérequis](#prérequis)
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Lancement de l’application](#lancement-de-lapplication)
+* [Utilisation](#utilisation)
+* [Présentation](#présentation)
+* [Topics](#topics)
+* [Remerciements](#remerciements)
+
+---
+
+## Aperçu du projet
+
+Gymify Web vise à simplifier la gestion quotidienne des salles de sport en proposant une interface moderne, intuitive et réactive.
+
+L’application permet notamment de :
+
+* gérer plusieurs salles de sport depuis une seule plateforme ;
+* administrer les utilisateurs selon leurs rôles ;
+* gérer les activités, abonnements, cours et événements ;
+* organiser les plannings des entraîneurs ;
+* permettre aux sportifs de consulter les offres, participer aux événements et effectuer des paiements ;
+* gérer les produits, avis, blogs et réclamations ;
+* intégrer des services externes comme Stripe, Google Auth, Google Calendar, reCAPTCHA, la météo et DeepInfra.
+
+---
+
+## Fonctionnalités
+
+### Administration
+
+* Gestion des utilisateurs.
+* Gestion des salles de sport.
+* Gestion des activités.
+* Gestion des réclamations.
+* Gestion des produits.
+* Supervision globale des différentes succursales.
+
+### Responsable de salle
+
+* Ajout et gestion des abonnements.
+* Gestion des événements propres à la salle.
+* Gestion des équipes affectées à la salle.
+* Suivi des opérations liées à une succursale spécifique.
+
+### Entraîneur
+
+* Création et gestion des cours.
+* Organisation des plannings.
+* Gestion des séances sportives.
+
+### Sportif
+
+* Consultation des activités.
+* Consultation des abonnements.
+* Consultation des événements.
+* Consultation des cours.
+* Consultation et achat de produits.
+* Paiement en ligne.
+* Participation aux événements.
+* Gestion des avis.
+* Contribution aux blogs.
+
+### Fonctionnalités transversales
+
+* Authentification sécurisée avec JWT.
+* Authentification avec Google.
+* Paiement en ligne avec Stripe.
+* Protection avec reCAPTCHA.
+* Gestion des cours avec Google Calendar.
+* Affichage de la météo.
+* Chatbot intégré avec DeepInfra.
+* Support multi-salles.
+* Interface responsive adaptée aux ordinateurs, tablettes et appareils mobiles.
+
+---
+
+## Rôles utilisateurs
+
+L’application prend en charge plusieurs profils :
+
+| Rôle                 | Description                                                                                                |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Administrateur       | Gère l’ensemble de la plateforme, les utilisateurs, les salles, les produits et les réclamations.          |
+| Responsable de salle | Gère les abonnements, événements et équipes liés à sa salle.                                               |
+| Entraîneur           | Organise les cours et les plannings.                                                                       |
+| Sportif              | Consulte les offres, effectue des paiements, participe aux événements et interagit avec les blogs et avis. |
+
+---
+
+## Pile technologique
+
+### Frontend
+
+* Twig
+* CSS
+* JavaScript
+
+### Backend
+
+* Symfony
+* PHP
+* MySQL
+* XAMPP
+
+### Sécurité
+
+* JWT pour l’authentification et l’autorisation.
+* Google Auth pour l’authentification avec Google.
+* reCAPTCHA pour renforcer la sécurité.
+
+### Services externes
+
+* Stripe pour les paiements en ligne.
+* Google Calendar pour la gestion des cours.
+* API météo pour l’affichage des conditions météorologiques.
+* DeepInfra pour l’intégration du chatbot.
+
+### Outils
+
+* Git pour le contrôle de version.
+* GitHub pour l’hébergement du dépôt.
+* Composer pour la gestion des dépendances PHP.
+* npm pour la gestion des dépendances frontend.
+* Symfony CLI pour le lancement du serveur local.
+
+---
+
+## Structure du projet
+
+```bash
+gymifyweb/
+├── public/
+│   ├── build/
+│   ├── css/
+│   ├── fonts/
+│   ├── img/
+│   ├── js/
+│   └── uploads/
+│
+├── src/
+│   ├── Command/
+│   ├── Controller/
+│   ├── Doctrine/
+│   ├── Entity/
+│   ├── Enum/
+│   ├── Form/
+│   ├── Notification/
+│   ├── Repository/
+│   ├── Security/
+│   ├── Service/
+│   └── Twig/
+│
+├── templates/
+├── .env
+├── README.md
+└── .gitignore
+```
+
+---
+
+## Prérequis
+
+Avant de lancer le projet, assurez-vous d’avoir installé :
+
+* PHP
+* Symfony CLI
+* Composer
+* Node.js et npm
+* XAMPP
+* MySQL
+* Git
+* Un compte Stripe pour l’intégration des paiements en ligne
+* Un compte Google pour l’authentification et Google Calendar
+
+---
+
+## Installation
+
+### 1. Cloner le dépôt
+
+```bash
+git clone https://github.com/Wajdbenameur1/gymifyWeb
+```
+
+### 2. Accéder au dossier du projet
+
+```bash
+cd gymifyWeb
+```
+
+### 3. Installer les dépendances PHP
+
+```bash
+composer install
+```
+
+### 4. Installer les dépendances frontend
+
+```bash
+npm install
+```
+
+---
+
+## Configuration
+
+### Variables d’environnement
+
+Créer un fichier `.env.local` à partir du fichier `.env` ou `.env.example`, puis renseigner les variables nécessaires à votre environnement local.
+
+Exemple :
+
+```env
+DATABASE_URL="mysql://root:@127.0.0.1:3306/gymifyweb?serverVersion=8.0"
+STRIPE_SECRET_KEY="your_stripe_secret_key"
+STRIPE_PUBLIC_KEY="your_stripe_public_key"
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
+RECAPTCHA_SITE_KEY="your_recaptcha_site_key"
+RECAPTCHA_SECRET_KEY="your_recaptcha_secret_key"
+DEEPINFRA_API_KEY="your_deepinfra_api_key"
+```
+
+### Base de données
+
+1. Démarrer XAMPP.
+2. Lancer Apache et MySQL.
+3. Créer une base de données MySQL.
+4. Mettre à jour la variable `DATABASE_URL` dans le fichier `.env.local`.
+
+Créer la base de données avec Symfony :
+
+```bash
+php bin/console doctrine:database:create
+```
+
+Exécuter les migrations :
+
+```bash
+php bin/console doctrine:migrations:migrate
+```
+
+---
+
+## Lancement de l’application
+
+### Démarrer le serveur Symfony
+
+```bash
+symfony server:start
+```
+
+### Lancer le serveur frontend si nécessaire
+
+```bash
+npm run dev
+```
+
+Ouvrir ensuite le navigateur à l’adresse suivante :
+
+```bash
+http://localhost:8000
+```
+
+---
+
+## Utilisation
+
+### Administrateur
+
+L’administrateur peut se connecter afin de gérer les utilisateurs, les salles, les activités, les réclamations et les produits.
+
+### Responsable de salle
+
+Le responsable de salle accède à son tableau de bord pour gérer les abonnements, les événements et les équipes liés à sa salle.
+
+### Entraîneur
+
+L’entraîneur peut créer, modifier et organiser les cours ainsi que les plannings.
+
+### Sportif
+
+Le sportif peut consulter les activités, abonnements, événements, cours et produits. Il peut également effectuer des paiements, gérer ses avis, contribuer aux blogs et participer aux événements.
+
+---
+
+## Présentation
+
+Vous pouvez consulter la présentation complète du projet ici :
+
+[Telecharger la presentation PDF](Gymify-web-desktop-presentation.pdf)
+
+### Slides
+
+![Slide 01](docs/presentation/slide-01.png)
+![Slide 02](docs/presentation/slide-02.png)
+![Slide 03](docs/presentation/slide-03.png)
+![Slide 04](docs/presentation/slide-04.png)
+![Slide 05](docs/presentation/slide-05.png)
+![Slide 06](docs/presentation/slide-06.png)
+![Slide 07](docs/presentation/slide-07.png)
+![Slide 08](docs/presentation/slide-08.png)
+![Slide 09](docs/presentation/slide-09.png)
+![Slide 10](docs/presentation/slide-10.png)
+![Slide 11](docs/presentation/slide-11.png)
+![Slide 12](docs/presentation/slide-12.png)
+![Slide 13](docs/presentation/slide-13.png)
+![Slide 14](docs/presentation/slide-14.png)
+![Slide 15](docs/presentation/slide-15.png)
+![Slide 16](docs/presentation/slide-16.png)
+![Slide 17](docs/presentation/slide-17.png)
+![Slide 18](docs/presentation/slide-18.png)
+![Slide 19](docs/presentation/slide-19.png)
+![Slide 20](docs/presentation/slide-20.png)
+![Slide 21](docs/presentation/slide-21.png)
+![Slide 22](docs/presentation/slide-22.png)
+![Slide 23](docs/presentation/slide-23.png)
+![Slide 24](docs/presentation/slide-24.png)
+![Slide 25](docs/presentation/slide-25.png)
+![Slide 26](docs/presentation/slide-26.png)
+![Slide 27](docs/presentation/slide-27.png)
+![Slide 28](docs/presentation/slide-28.png)
+![Slide 29](docs/presentation/slide-29.png)
+![Slide 30](docs/presentation/slide-30.png)
+![Slide 31](docs/presentation/slide-31.png)
+![Slide 32](docs/presentation/slide-32.png)
+![Slide 33](docs/presentation/slide-33.png)
+![Slide 34](docs/presentation/slide-34.png)
+![Slide 35](docs/presentation/slide-35.png)
+![Slide 36](docs/presentation/slide-36.png)
+![Slide 37](docs/presentation/slide-37.png)
+![Slide 38](docs/presentation/slide-38.png)
+![Slide 39](docs/presentation/slide-39.png)
+![Slide 40](docs/presentation/slide-40.png)
+![Slide 41](docs/presentation/slide-41.png)
+![Slide 42](docs/presentation/slide-42.png)
+![Slide 43](docs/presentation/slide-43.png)
+![Slide 44](docs/presentation/slide-44.png)
+![Slide 45](docs/presentation/slide-45.png)
+![Slide 46](docs/presentation/slide-46.png)
+![Slide 47](docs/presentation/slide-47.png)
+![Slide 48](docs/presentation/slide-48.png)
+![Slide 49](docs/presentation/slide-49.png)
+![Slide 50](docs/presentation/slide-50.png)
+![Slide 51](docs/presentation/slide-51.png)
+![Slide 52](docs/presentation/slide-52.png)
+
+---
+
+## Topics
+
+* Développement web
+* Symfony
+* PHP
+* Twig
+* CSS
+* JavaScript
+* MySQL
+* XAMPP
+* Stripe
+* JWT
+* Google Auth
+* Google Calendar
+* reCAPTCHA
+* DeepInfra
+* API météo
+* Intelligence artificielle
+* Machine Learning
+* Paiement en ligne
+
+---
+
+## Remerciements
+
+Ce projet a été réalisé sous la direction du corps professoral de l’École d’Ingénieurs ESPRIT.
+
+Nous remercions particulièrement Madame Sassi Soumaya et Madame Maroua Douiri pour leur accompagnement, leur soutien et leurs retours tout au long du développement du projet.
+
+
+https://github.com/ranym-eng/ML-heartdisease
+readme 
+# Système de Prédiction du Risque Cardiaque
+
+Application Streamlit permettant de démontrer plusieurs modèles de Machine Learning pour la prédiction du risque cardiaque.
+
+Le projet propose différents objectifs métier, notamment la classification des patients à risque, la prédiction d’un score de risque, la classification multi-classe et le clustering de patients similaires.
+
+---
+
+## Démo
+
+### Vidéo de présentation
+
+Vous pouvez consulter la vidéo de démonstration du projet ici :
+
+[Voir la vidéo YouTube]https://youtu.be/z5nOB7gtSbg
+
+### Live Demo
+
+Vous pouvez tester l’application en ligne ici :
+
+[Accéder au Live Demo](https://ml-heartdisease-33xtbcsv2lig92i98ev6uw.streamlit.app/)
+
+---
+
+## Installation
+
+### 1. Cloner le projet
+
+```bash
+git clone METTRE_LE_LIEN_DU_REPOSITORY_ICI
+```
+
+### 2. Accéder au dossier du projet
+
+```bash
+cd NOM_DU_DOSSIER
+```
+
+### 3. Installer les dépendances
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Utilisation
+
+### Étape 1 : Entraîner les modèles
+
+Avant de lancer l’application, entraînez et sauvegardez les modèles :
+
+```bash
+python train_models.py
+```
+
+Cette étape va générer les fichiers suivants :
+
+* `model_BO1.pkl` : modèle de classification binaire
+* `model_BO2.pkl` : modèle de régression
+* `model_BO3.pkl` : modèle de classification multi-classe
+* `model_BO4.pkl` : modèle de clustering
+* `scaler_BO1.pkl`, `scaler_BO2.pkl`, `scaler_BO3.pkl`, `scaler_BO4.pkl` : fichiers de normalisation des données
+* `features_BO1.pkl`, `features_BO2.pkl`, `features_BO3.pkl`, `features_BO4.pkl` : variables utilisées par les modèles
+* `top_5_features_BO3.pkl` : les 5 variables les plus importantes pour BO3
+* `cluster_info_BO4.csv` : informations sur les clusters
+
+---
+
+### Étape 2 : Lancer l’application
+
+```bash
+streamlit run app.py
+```
+
+L’application sera accessible à l’adresse suivante :
+
+```bash
+http://localhost:8501
+```
+
+---
+
+## Structure de l’Application
+
+L’application est composée de plusieurs pages :
+
+| Page           | Description                                                              |
+| -------------- | ------------------------------------------------------------------------ |
+| Page d’accueil | Présentation du projet, des objectifs métier et du pipeline global       |
+| BO1            | Classification binaire pour identifier les patients à haut risque        |
+| BO2            | Prédiction d’un score continu de risque entre 0 et 100                   |
+| BO3            | Classification multi-classe selon trois niveaux : faible, moyen et élevé |
+| BO4            | Clustering pour regrouper les patients selon des profils similaires      |
+
+---
+
+## Objectifs Métier
+
+### BO1 : Classification binaire
+
+Identifier précocement les patients asymptomatiques présentant un risque cardiaque élevé.
+
+### BO2 : Régression
+
+Évaluer le risque comportemental à l’aide d’un score continu compris entre 0 et 100.
+
+### BO3 : Classification multi-classe
+
+Classer les patients selon trois niveaux de risque :
+
+* Risque faible
+* Risque moyen
+* Risque élevé
+
+### BO4 : Clustering
+
+Identifier des groupes de patients similaires afin de mieux comprendre les profils de risque.
+
+---
+
+## Technologies utilisées
+
+* Python
+* Streamlit
+* Scikit-learn
+* Pandas
+* NumPy
+* Matplotlib
+* Pickle
+
+---
+
+## Fichiers principaux
+
+```bash
+.
+├── app.py
+├── train_models.py
+├── requirements.txt
+├── model_BO1.pkl
+├── model_BO2.pkl
+├── model_BO3.pkl
+├── model_BO4.pkl
+├── scaler_BO1.pkl
+├── scaler_BO2.pkl
+├── scaler_BO3.pkl
+├── scaler_BO4.pkl
+├── features_BO1.pkl
+├── features_BO2.pkl
+├── features_BO3.pkl
+├── features_BO4.pkl
+├── top_5_features_BO3.pkl
+└── cluster_info_BO4.csv
+```
+
+---
+
+## Auteur
+
+Projet développé dans le cadre d’un travail académique autour de la prédiction du risque cardiaque à l’aide de modèles de Machine Learning.
+
+
+
+
+https://github.com/ranym-eng/Gymify-desktop
+
+readme 
+# Gymify Desktop
+
+## Système de Gestion de Salle de Sport
+
+Gymify Desktop est une application desktop développée dans le cadre des cours de l’École d’Ingénieurs ESPRIT pour l’année universitaire 2024-2025.
+
+L’application permet de gérer plusieurs salles de sport à travers une plateforme centralisée destinée aux administrateurs, responsables de salles, entraîneurs et sportifs. Elle couvre plusieurs modules : gestion des utilisateurs, salles, activités, abonnements, événements, cours, paiements, avis, blogs, produits et réclamations.
+
+---
+
+## Table des matières
+
+* [Aperçu du projet](#aperçu-du-projet)
+* [Fonctionnalités](#fonctionnalités)
+* [Rôles utilisateurs](#rôles-utilisateurs)
+* [Pile technologique](#pile-technologique)
+* [Structure du projet](#structure-du-projet)
+* [Prérequis](#prérequis)
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Lancement de l’application](#lancement-de-lapplication)
+* [Présentation](#présentation)
+* [Topics](#topics)
+* [Remerciements](#remerciements)
+
+---
+
+## Aperçu du projet
+
+Gymify Desktop vise à simplifier la gestion quotidienne des salles de sport en proposant une interface intuitive, moderne et réactive.
+
+L’application permet notamment de :
+
+* gérer plusieurs salles de sport depuis une seule plateforme ;
+* administrer les utilisateurs selon leurs rôles ;
+* gérer les abonnements, cours, événements et paiements ;
+* organiser les plannings des entraîneurs ;
+* permettre aux sportifs de consulter les offres, participer aux événements et publier des avis ;
+* intégrer des services externes comme Stripe, Google Calendar, reCAPTCHA et la météo.
+
+---
+
+## Fonctionnalités
+
+### Administration
+
+* Gestion des utilisateurs.
+* Gestion des salles de sport.
+* Gestion des activités.
+* Gestion des réclamations.
+* Gestion des produits.
+* Supervision globale des différentes succursales.
+
+### Responsable de salle
+
+* Ajout et gestion des abonnements.
+* Gestion des événements propres à la salle.
+* Gestion des équipes affectées à la salle.
+* Suivi des opérations liées à une succursale spécifique.
+
+### Entraîneur
+
+* Création et gestion des cours.
+* Organisation des plannings.
+* Suivi des séances sportives.
+
+### Sportif
+
+* Consultation des activités.
+* Consultation des abonnements.
+* Consultation des événements.
+* Consultation des cours.
+* Consultation et achat de produits.
+* Paiement en ligne.
+* Participation aux événements.
+* Gestion des avis.
+* Contribution aux blogs.
+
+### Fonctionnalités transversales
+
+* Authentification sécurisée avec JWT.
+* Paiement en ligne avec Stripe.
+* Protection avec reCAPTCHA.
+* Gestion des cours avec Google Calendar.
+* Affichage de la météo.
+* Système de recommandation basé sur l’intelligence artificielle / machine learning.
+* Support multi-salles.
+
+---
+
+## Rôles utilisateurs
+
+L’application prend en charge plusieurs profils :
+
+| Rôle                 | Description                                                                                                |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Administrateur       | Gère l’ensemble de la plateforme, les utilisateurs, les salles, les produits et les réclamations.          |
+| Responsable de salle | Gère les abonnements, événements et équipes liés à sa salle.                                               |
+| Entraîneur           | Organise les cours et les plannings.                                                                       |
+| Sportif              | Consulte les offres, effectue des paiements, participe aux événements et interagit avec les blogs et avis. |
+
+---
+
+## Pile technologique
+
+### Frontend
+
+* JavaFX
+* FXML
+* CSS
+
+### Backend
+
+* Java
+* Maven
+* MySQL
+* XAMPP
+
+### Sécurité
+
+* JWT pour l’authentification et l’autorisation.
+* reCAPTCHA pour renforcer la sécurité.
+
+### Services externes
+
+* Stripe pour les paiements en ligne.
+* Google Calendar pour la gestion des cours.
+* API météo pour l’affichage des conditions météorologiques.
+
+### Outils
+
+* Git pour le contrôle de version.
+* GitHub pour l’hébergement du dépôt.
+* Maven pour la gestion des dépendances.
+
+---
+
+## Structure du projet
+
+```bash
+gymify/
+├── java/
+│   ├── controllers/
+│   ├── entities/
+│   ├── services/
+│   ├── tests/
+│   └── utils/
+│
+├── resources/
+│   ├── assets/
+│   ├── config/
+│   ├── images/
+│   ├── readme-images/
+│   ├── recommender/
+│   └── Uploads/
+│
+├── pom.xml
+├── README.md
+└── .gitignore
+```
+
+---
+
+## Prérequis
+
+Avant de lancer le projet, assurez-vous d’avoir installé :
+
+* Java
+* Maven
+* XAMPP
+* MySQL
+* Git
+* Un compte Stripe pour l’intégration du paiement en ligne
+
+---
+
+## Installation
+
+### 1. Cloner le dépôt
+
+```bash
+git clone https://github.com/alouiamani/DevAthletes/
+```
+
+### 2. Accéder au dossier du projet
+
+```bash
+cd DevAthletes
+```
+
+### 3. Installer les dépendances Maven
+
+Depuis votre IDE, vous pouvez utiliser :
+
+```bash
+maven:reload project
+```
+
+Ou en ligne de commande :
+
+```bash
+mvn clean install
+```
+
+---
+
+## Configuration
+
+### Base de données
+
+1. Démarrer XAMPP.
+2. Lancer Apache et MySQL.
+3. Créer une base de données MySQL nommée :
+
+```sql
+projweb
+```
+
+### Configuration de la connexion
+
+Créer ou modifier le fichier de configuration de la base de données, puis ajouter l’URL suivante :
+
+```java
+URL = "jdbc:mysql://localhost:3306/projweb";
+```
+
+Vérifiez également que les identifiants MySQL correspondent à votre configuration locale.
+
+---
+
+## Lancement de l’application
+
+Pour lancer l’application JavaFX, utilisez la commande suivante :
+
+```bash
+javafx:run
+```
+
+Ou via Maven :
+
+```bash
+mvn javafx:run
+```
+
+---
+
+## Utilisation
+
+### Administrateur
+
+L’administrateur peut se connecter afin de gérer les utilisateurs, les salles, les activités, les réclamations et les produits.
+
+### Responsable de salle
+
+Le responsable de salle accède à son tableau de bord pour gérer les abonnements, les événements et les équipes liés à sa salle.
+
+### Entraîneur
+
+L’entraîneur peut créer, modifier et organiser les cours ainsi que les plannings.
+
+### Sportif
+
+Le sportif peut consulter les activités, abonnements, événements, cours et produits. Il peut également effectuer des paiements, gérer ses avis, contribuer aux blogs et participer aux événements.
+
+---
+
+## Présentation
+
+Vous pouvez consulter la présentation complète du projet ici :
+
+[Telecharger la presentation PDF](Gymify-web-desktop-presentation.pdf)
+
+### Slides
+
+![Slide 01](docs/presentation/slide-01.png)
+![Slide 02](docs/presentation/slide-02.png)
+![Slide 03](docs/presentation/slide-03.png)
+![Slide 04](docs/presentation/slide-04.png)
+![Slide 05](docs/presentation/slide-05.png)
+![Slide 06](docs/presentation/slide-06.png)
+![Slide 07](docs/presentation/slide-07.png)
+![Slide 08](docs/presentation/slide-08.png)
+![Slide 09](docs/presentation/slide-09.png)
+![Slide 10](docs/presentation/slide-10.png)
+![Slide 11](docs/presentation/slide-11.png)
+![Slide 12](docs/presentation/slide-12.png)
+![Slide 13](docs/presentation/slide-13.png)
+![Slide 14](docs/presentation/slide-14.png)
+![Slide 15](docs/presentation/slide-15.png)
+![Slide 16](docs/presentation/slide-16.png)
+![Slide 17](docs/presentation/slide-17.png)
+![Slide 18](docs/presentation/slide-18.png)
+![Slide 19](docs/presentation/slide-19.png)
+![Slide 20](docs/presentation/slide-20.png)
+![Slide 21](docs/presentation/slide-21.png)
+![Slide 22](docs/presentation/slide-22.png)
+![Slide 23](docs/presentation/slide-23.png)
+![Slide 24](docs/presentation/slide-24.png)
+![Slide 25](docs/presentation/slide-25.png)
+![Slide 26](docs/presentation/slide-26.png)
+![Slide 27](docs/presentation/slide-27.png)
+![Slide 28](docs/presentation/slide-28.png)
+![Slide 29](docs/presentation/slide-29.png)
+![Slide 30](docs/presentation/slide-30.png)
+![Slide 31](docs/presentation/slide-31.png)
+![Slide 32](docs/presentation/slide-32.png)
+![Slide 33](docs/presentation/slide-33.png)
+![Slide 34](docs/presentation/slide-34.png)
+![Slide 35](docs/presentation/slide-35.png)
+![Slide 36](docs/presentation/slide-36.png)
+![Slide 37](docs/presentation/slide-37.png)
+![Slide 38](docs/presentation/slide-38.png)
+![Slide 39](docs/presentation/slide-39.png)
+![Slide 40](docs/presentation/slide-40.png)
+![Slide 41](docs/presentation/slide-41.png)
+![Slide 42](docs/presentation/slide-42.png)
+![Slide 43](docs/presentation/slide-43.png)
+![Slide 44](docs/presentation/slide-44.png)
+![Slide 45](docs/presentation/slide-45.png)
+![Slide 46](docs/presentation/slide-46.png)
+![Slide 47](docs/presentation/slide-47.png)
+![Slide 48](docs/presentation/slide-48.png)
+![Slide 49](docs/presentation/slide-49.png)
+![Slide 50](docs/presentation/slide-50.png)
+![Slide 51](docs/presentation/slide-51.png)
+![Slide 52](docs/presentation/slide-52.png)
+
+---
+
+## Topics
+
+* Application desktop
+* Java
+* JavaFX
+* FXML
+* CSS
+* MySQL
+* XAMPP
+* Maven
+* Stripe
+* JWT
+* reCAPTCHA
+* Google Calendar
+* API météo
+* Intelligence artificielle
+* Machine Learning
+* Paiement en ligne
+
+---
+
+## Remerciements
+
+Ce projet a été réalisé sous la direction du corps professoral de l’École d’Ingénieurs ESPRIT.
+
+Nous remercions particulièrement Madame Chaima et Monsieur Moataz pour leur accompagnement, leur soutien et leurs retours tout au long du développement du projet.
+
+https://github.com/ranym-eng/eco-ressource-b2b-backend 
+readme
+# Eco Ressource Backend
+
+Eco Ressource Backend est l'API Spring Boot de la plateforme Eco Ressource, une marketplace B2B orientee economie circulaire. Le projet centralise la gestion des utilisateurs, entreprises, annonces, stocks, reservations, livraisons, dons, evenements solidaires et modules financiers.
+
+L'objectif de la plateforme est de faciliter la reutilisation, l'echange, la donation et la valorisation de ressources entre acteurs professionnels et associatifs, tout en proposant des services complementaires comme la moderation, l'analyse assistee par IA, le suivi logistique, les paiements et la gestion de documents.
+
+## Fonctionnalites principales
+
+- Authentification et securisation des endpoints avec Spring Security et JWT.
+- Gestion des utilisateurs, roles, entreprises, transporteurs et associations solidaires.
+- Publication, recherche, moderation et gestion des annonces et ressources.
+- Gestion des produits, stocks, mouvements d'inventaire et fichiers associes.
+- Reservations, commandes de livraison, expeditions et suivi logistique.
+- Dons, participations aux evenements et documents d'evenement.
+- Modules finance : factures, transactions, financement, escrow, analytics et integrations de paiement.
+- Services IA pour la generation de descriptions, l'analyse de defauts et l'aide a la recherche de produits.
+- Notifications et integrations externes : email, Discord, Stripe, Konnect, services de geocodage et APIs IA.
+
+## Technologies utilisees
+
+- Java 17
+- Spring Boot 3.2.5
+- Spring Web, Spring Security, Spring Data JPA, Validation et WebSocket
+- MySQL
+- Maven
+- JWT
+- Springdoc OpenAPI / Swagger
+- Stripe SDK
+- Thymeleaf pour les templates email
+
+## Structure du projet
+
+- `src/main/java/com/marketplace/backend/controller` : endpoints REST de l'application.
+- `src/main/java/com/marketplace/backend/entity` : entites metier et modeles persistants.
+- `src/main/java/com/marketplace/backend/repository` : repositories Spring Data JPA.
+- `src/main/java/com/marketplace/backend/service` : logique metier.
+- `src/main/resources` : configuration, templates et scripts de migration.
+- `database` : scripts SQL de base de donnees.
+- `diagrams` : diagrammes de conception du projet.
+
+## Lancement local
+
+Prerequis :
+
+- Java 17
+- Maven
+- MySQL
+
+Etapes principales :
+
+1. Creer une base MySQL nommee `eco_ressource_db`.
+2. Configurer les variables sensibles dans un fichier `.env` local ou dans l'environnement systeme.
+3. Adapter `src/main/resources/application.properties` si necessaire.
+4. Lancer l'application :
+
+```bash
+mvn spring-boot:run
+```
+
+Par defaut, l'API demarre sur le port `9090`.
+
+La documentation Swagger est disponible a l'adresse :
+
+```text
+http://localhost:9090/swagger-ui.html
+```
+
+## Diagrammes
+
+### Diagramme de classes
+
+![Diagramme DC final](diagrams/dc%20final.png)
+
+### Diagramme de cas d'utilisation
+
+![Diagramme UC final](diagrams/uc%20final.jpg)
+
+https://github.com/ranym-eng/eco-ressource-b2b-frontend 
+readme
+![Landing home page](src/assets/images/landing%20home%20page.jpeg)
+
+# Eco Ressource B2B
+
+Eco Ressource B2B est une application web Angular dediee a la gestion et a la valorisation des ressources entre entreprises. La plateforme centralise les annonces, les stocks, les reservations, les livraisons, les transactions et les evenements afin de faciliter les echanges B2B dans une logique d'economie circulaire.
+
+Le projet propose des espaces separes selon le profil utilisateur : entreprise, transporteur et administrateur. Chaque role dispose d'un tableau de bord et de fonctionnalites adaptees a ses besoins operationnels.
+
+## Objectifs du projet
+
+- Mettre en relation les entreprises autour de ressources, produits ou stocks disponibles.
+- Simplifier la publication, la recherche et la gestion des annonces.
+- Suivre les stocks, les inventaires, les mouvements et les produits.
+- Organiser les reservations, les commandes et les livraisons.
+- Donner aux transporteurs un espace pour suivre les trajets, expeditions, bons de livraison et revenus.
+- Offrir a l'administrateur une vision globale sur les utilisateurs, annonces, stocks, livraisons, reservations, finances, evenements et actions de solidarite.
+
+## Fonctionnalites principales
+
+### Espace entreprise
+
+- Tableau de bord entreprise.
+- Marketplace pour consulter les annonces disponibles.
+- Gestion des annonces, demandes, produits, stocks et inventaires.
+- Suivi des reservations, livraisons, reclamations et transactions.
+- Generation de rapports et consultation des indicateurs financiers.
+- Modules complementaires : recherche de produits, chatbot de marche, factures, tresorerie, evenements et solidarite.
+
+### Espace transporteur
+
+- Tableau de bord transporteur.
+- Gestion des trajets et expeditions.
+- Consultation des bons de livraison.
+- Suivi des revenus.
+
+### Espace administrateur
+
+- Gestion des utilisateurs.
+- Supervision des annonces, stocks, produits et mouvements de stock.
+- Suivi des livraisons, expeditions et reservations.
+- Gestion de la tresorerie, des evenements et des actions solidaires.
+- Acces aux outils de statistiques, detection de produits endommages, scan d'inventaire et chatbot.
+
+## Technologies utilisees
+
+- Angular 21
+- TypeScript
+- RxJS
+- Angular Router
+- Angular Forms et Reactive Forms
+- Angular Material et Angular CDK
+- Bootstrap et Bootstrap Icons
+- Tailwind CSS
+- Chart.js, ApexCharts et ng-apexcharts
+- FullCalendar
+- Leaflet pour les cartes
+- jsPDF, html2canvas et xlsx pour l'export de documents
+- SockJS et STOMP pour les fonctionnalites temps reel
+- QRCode, JsBarcode et Quagga2 pour les QR codes, codes-barres et scans
+
+## Structure du projet
+
+```text
+src/
+  app/
+    core/          Services, modeles, guards et interceptors
+    shared/        Composants partages, layout, sidebar, header et outils communs
+    features/      Modules fonctionnels par domaine et par role
+    components/    Composants reutilisables metier
+  assets/          Images et ressources statiques
+  environments/    Configuration des environnements
+diagrams/          Diagrammes UML du projet
+```
+
+## Diagrammes
+
+### Diagramme de cas d'utilisation final
+
+![Diagramme de cas d'utilisation final](diagrams/uc%20final.jpg)
+
+### Diagramme de classes final
+
+![Diagramme de classes final](diagrams/dc%20final.png)
+
+## Installation
+
+Installez les dependances du projet :
+
+```bash
+npm install
+```
+
+## Lancement en developpement
+
+Pour demarrer le serveur local :
+
+```bash
+npm start
+```
+
+L'application sera disponible a l'adresse :
+
+```text
+http://localhost:4200/
+```
+
+Pour lancer l'application sur le reseau local :
+
+```bash
+npm run start:lan
+```
+
+## Build
+
+Pour compiler le projet :
+
+```bash
+npm run build
+```
+
+Les fichiers generes seront places dans le dossier `dist/`.
+
+## Tests
+
+Pour executer les tests :
+
+```bash
+npm test
+```
+
+## Notes
+
+Le frontend communique avec un backend via des services HTTP situes principalement dans `src/app/core/services`. Les fichiers `proxy.conf.js` et `proxy.conf.json` permettent de configurer le proxy de developpement lorsque l'API backend est lancee localement.
+
+
+
+https://github.com/ranym-eng/Web-based-test-logging-management-system 
+readme
+
+
+
+# TraceDuTest
+
+**ASP.NET Core 8** web API for centralized management of **test traces**, **serial numbers**, **operations**, **log files**, and **users**, in an industrial manufacturing context (quality control and traceability of tests on serialized equipment).
+
+This web portal is dedicated to viewing and administering test data, with **role-based access control** (see the use case diagram below).
+
+## Features (business view)
+
+| Actor | Main use cases |
+|-------|----------------|
+| **User** | Register, authenticate, view profile, lock the application, browse test traces and statistics |
+| **Test manager** | Full *User* scope + **log file management** |
+| **Administrator** | Full *User* scope + **serial number management**, **operation management**, **notifications**, **user management** |
+
+## Global use case diagram
+
+![Use case diagram](docs/use-case-global.jpg)
+
+## Data model (conceptual view)
+
+Main entities and relationships are summarized in the following class diagram (logical names: `NumSérie`, `TraceDuTest`, `Opération`, `FichierLog`, `Utilisateur`, `Notification`).
+
+![Class diagram](docs/diagramme-classes-global.jpg)
+
+In the .NET implementation, tables are exposed through **Entity Framework Core** (`TraceDuTestContext`): `User`, `Trace`, `NumeroSeries`, `Operation`, `Fichier`, `Notification`.
+
+## Tech stack
+
+- **.NET 8** — REST API (controllers under `Controllers/TraceController/`)
+- **Entity Framework Core 8** + **SQL Server**
+- **JWT authentication** (`Microsoft.AspNetCore.Authentication.JwtBearer`)
+- **E-mail** (Sendinblue / Brevo via `Sendinblue` package)
+- **Spreadsheets / export**: **EPPlus** (`OfficeOpenXml`)
+- **Swagger** in the Development environment
+
+## Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download)
+- SQL Server (instance reachable with the connection string set in `appsettings.json`)
+
+## Configuration
+
+1. **Connection string** — In `appsettings.json`, set `ConnectionStrings:DefaultConnection` to your server and `TraceDuTest` database.
+2. **JWT** — `JWT:Secret` must **not** be empty: locally, use [user secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) (`dotnet user-secrets set "JWT:Secret" "<key at least 64 characters>"`) or the `JWT__Secret` environment variable. Otherwise the application will not start.
+3. **E-mail** — Set `Smtp:User`, `Smtp:Password`, `Smtp:From` (and optionally `Smtp:Host` / `Smtp:Port`) in user secrets or a local, non-committed file. If these are empty, outgoing mail is skipped without error. `Sendinblue:ApiKey` remains available for a future API integration if needed.
+
+## Run the API
+
+```bash
+dotnet restore
+dotnet run --project TraceDuTest.csproj
+```
+
+In Development, Swagger UI is available at the URL printed in the console (often `https://localhost:<port>/swagger`).
+
+## Repository layout
+
+- `Controllers/` — HTTP endpoints (auth, users, traces, serial numbers, operations, files, notifications)
+- `Services/` / `Repositories/` — Business logic and data access
+- `Models/` — EF entities and `TraceDuTestContext`
+- `DTO/` — Data transfer objects
+- `docs/` — UML diagrams referenced by this README
+
+---
+
+
+https://github.com/ranym-eng/my-club-life
+# My Club Life
+
+**My Club Life** is a web application aimed at the university social space. It helps students **discover clubs**, explore **events** and **competitions**, and interact with club life (joining clubs, viewing members, handling requests, and managing competition views such as upcoming, ongoing, and past events).
+
+## Features (overview)
+
+- Browse and explore **clubs** and club-related pages  
+- **Authentication**: account creation and login (frontend services plus PHP API endpoints)  
+- **Events** and **competitions** workflows (upcoming, ongoing, historical)  
+- **Join club** flows, **member lists**, and **requests** management  
+- Responsive UI built with **Bootstrap** and **Angular Material**
+
+## Project structure
+
+Source and assets live under `My-Club-Life-main/`:
+
+| Area | Path | Description |
+|------|------|-------------|
+| Frontend | `My-Club-Life-main/FE/MyClubLife/` | Angular 15 SPA |
+| API | `My-Club-Life-main/API/` | PHP endpoints (e.g. login, create account) |
+| Backend services | `My-Club-Life-main/BE/` | TypeScript service layer |
+| Database | `My-Club-Life-main/DB/` | SQL model and related assets |
+| Build output | `My-Club-Life-main/build/` | Production build artifacts |
+
+Additional folders include documentation and design materials (`Spec`, `UI`, `UX`, `SEO`, `OPT`).
+
+## Tech stack
+
+- **Frontend**: Angular 15, TypeScript, Bootstrap 5, Angular Material, RxJS  
+- **API**: PHP  
+- **Database**: MySQL (see `DB/DB Model.sql`)
+
+## Getting started (frontend)
+
+From the Angular project directory:
+
+```bash
+cd My-Club-Life-main/FE/MyClubLife
+npm install
+npm start
+```
+
+The dev server runs at `http://localhost:4200/` by default. For production builds, use `npm run build`.
+
+## License
+
+Specify your license here if the project is published publicly.  
+
+
+
+
+
+
+
+
+
+
